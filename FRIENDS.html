@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kebab Friends – Szkolna 69, Lelis</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&family=Barlow+Condensed:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #d91c1c;
+    --yellow: #f5c518;
+    --black: #0d0d0d;
+    --dark: #161616;
+    --card: #1e1e1e;
+    --text: #f0f0f0;
+    --muted: #aaa;
+    --green: #4caf50;
+    --orange: #ff6b35;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(13,13,13,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 2px solid var(--red);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5vw; height: 68px;
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.9rem;
+    color: var(--text);
+    letter-spacing: 2px;
+  }
+  .nav-logo span { color: var(--red); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none;
+    font-weight: 600; font-size: 0.85rem; letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--yellow); }
+  .nav-cta {
+    background: var(--red); color: #fff;
+    padding: 10px 22px; border-radius: 4px;
+    font-weight: 700; font-size: 0.85rem; letter-spacing: 1px;
+    text-decoration: none; text-transform: uppercase;
+    transition: background .2s;
+  }
+  .nav-cta:hover { background: #b81515; }
+  .nav-actions {
+    display: flex; align-items: center; gap: .75rem;
+  }
+  .lang-toggle {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 4px;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.04);
+    cursor: pointer;
+    transition: border-color .2s, transform .2s, background .2s;
+  }
+  .lang-toggle:hover {
+    border-color: rgba(245,197,24,0.45);
+    background: rgba(255,255,255,0.07);
+    transform: translateY(-1px);
+  }
+  .lang-toggle:focus-visible {
+    outline: 2px solid var(--yellow);
+    outline-offset: 3px;
+  }
+  .lang-pill {
+    min-width: 42px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    color: var(--muted);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: .8rem;
+    font-weight: 400;
+    letter-spacing: 1px;
+    line-height: 1;
+    text-transform: uppercase;
+    transition: background .2s, color .2s, box-shadow .2s;
+  }
+  .lang-toggle[data-lang="pl"] .lang-pill-pl,
+  .lang-toggle[data-lang="en"] .lang-pill-en {
+    background: var(--red);
+    color: #fff;
+    box-shadow: 0 4px 18px rgba(217,28,28,0.35);
+  }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    position: relative; overflow: hidden;
+    padding: 100px 5vw 60px;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 70% 70% at 65% 50%, rgba(217,28,28,0.18) 0%, transparent 70%),
+      repeating-linear-gradient(135deg, transparent, transparent 40px, rgba(255,255,255,0.015) 40px, rgba(255,255,255,0.015) 41px);
+    z-index: 0;
+  }
+  .hero-bg::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 80% 50%, rgba(245,197,24,0.07) 0%, transparent 60%);
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 620px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(217,28,28,0.15);
+    border: 1px solid rgba(217,28,28,0.4);
+    padding: 6px 14px; border-radius: 20px;
+    font-size: 0.78rem; font-weight: 700; color: var(--red);
+    letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    animation: fadeUp .6s ease both;
+  }
+  .hero-badge::before { content: '🔥'; font-size: 1rem; }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 10vw, 8.5rem);
+    line-height: 0.9;
+    color: var(--text);
+    animation: fadeUp .6s .1s ease both;
+  }
+  .hero-title .accent { color: var(--red); }
+  .hero-title .line2 { color: var(--yellow); }
+  .hero-sub {
+    margin-top: 1.5rem;
+    font-size: 1.1rem; color: var(--muted); line-height: 1.6;
+    animation: fadeUp .6s .2s ease both;
+  }
+  .hero-actions {
+    margin-top: 2.5rem; display: flex; gap: 1rem; flex-wrap: wrap;
+    animation: fadeUp .6s .3s ease both;
+  }
+  .btn-primary {
+    background: var(--red); color: #fff;
+    padding: 15px 36px; border-radius: 4px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 400; font-size: 1.1rem; letter-spacing: 2px;
+    text-transform: uppercase; text-decoration: none;
+    transition: transform .15s, background .2s;
+    box-shadow: 0 4px 20px rgba(217,28,28,0.4);
+  }
+  .btn-primary:hover { background: #b81515; transform: translateY(-2px); }
+  .btn-outline {
+    border: 2px solid var(--yellow); color: var(--yellow);
+    padding: 13px 30px; border-radius: 4px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 400; font-size: 1.1rem; letter-spacing: 2px;
+    text-transform: uppercase; text-decoration: none;
+    transition: background .2s, color .2s;
+  }
+  .btn-outline:hover { background: var(--yellow); color: var(--black); }
+  .hero-stats {
+    margin-top: 3.5rem; display: flex; gap: 2.5rem;
+    animation: fadeUp .6s .4s ease both;
+  }
+  .stat { text-align: left; }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.6rem; color: var(--yellow); line-height: 1;
+  }
+  .stat-label { font-size: 0.75rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+
+  /* ── SECTION BASE ── */
+  section { padding: 90px 5vw; }
+  .section-label {
+    display: inline-block;
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--red);
+    margin-bottom: .8rem;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: 1; color: var(--text);
+    margin-bottom: 1rem;
+  }
+  .section-title span { color: var(--yellow); }
+  .section-desc { color: var(--muted); font-size: 1rem; line-height: 1.7; max-width: 520px; }
+
+  /* ── ABOUT ── */
+  #about { background: var(--dark); }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 5vw; align-items: center; margin-top: 3rem;
+  }
+  .about-visual {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px; overflow: hidden;
+    aspect-ratio: 4/3;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .about-visual-inner {
+    font-size: 8rem; filter: drop-shadow(0 0 40px rgba(217,28,28,0.5));
+    animation: float 3s ease-in-out infinite;
+  }
+  .about-stripe {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(90deg, var(--red), transparent);
+    height: 4px;
+  }
+  .about-points { list-style: none; margin-top: 1.5rem; display: flex; flex-direction: column; gap: .9rem; }
+  .about-points li {
+    display: flex; align-items: flex-start; gap: .8rem;
+    font-size: .95rem; line-height: 1.5; color: var(--muted);
+  }
+  .about-points li::before {
+    content: ''; min-width: 6px; height: 6px;
+    background: var(--red); border-radius: 50%; margin-top: .45rem;
+  }
+  .about-points li strong { color: var(--text); }
+
+  /* ── MENU ── */
+  #menu { background: var(--black); }
+  .menu-cats {
+    display: flex; gap: .6rem; flex-wrap: wrap; margin: 2rem 0 2.5rem;
+  }
+  .cat-btn {
+    background: var(--card); border: 1px solid rgba(255,255,255,0.08);
+    color: var(--muted); padding: 8px 18px; border-radius: 30px;
+    font-size: .8rem; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; cursor: pointer;
+    transition: all .2s; font-family: 'Barlow', sans-serif;
+  }
+  .cat-btn.active, .cat-btn:hover {
+    background: var(--red); border-color: var(--red); color: #fff;
+  }
+  .cat-btn:focus-visible {
+    outline: 2px solid var(--yellow);
+    outline-offset: 3px;
+  }
+  .menu-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.2rem;
+  }
+  .menu-card {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px; padding: 1.4rem;
+    transition: transform .2s, border-color .2s;
+    position: relative; overflow: hidden;
+  }
+  .menu-card:hover { transform: translateY(-4px); border-color: rgba(217,28,28,0.4); }
+  .menu-card.is-hidden { display: none; }
+  .menu-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--red); transform: scaleX(0); transition: transform .3s;
+    transform-origin: left;
+  }
+  .menu-card:hover::before { transform: scaleX(1); }
+  .menu-cat-tag {
+    font-size: .65rem; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--red); margin-bottom: .5rem;
+  }
+  .menu-item-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.15rem; font-weight: 400;
+    color: var(--text); margin-bottom: .3rem;
+  }
+  .menu-item-desc { font-size: .8rem; color: var(--muted); line-height: 1.5; margin-bottom: .9rem; }
+  .menu-item-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem; color: var(--yellow);
+  }
+  .menu-item-price span { font-size: 1rem; color: var(--muted); margin-left: 4px; }
+  .price-range { font-size: .8rem; color: var(--muted); margin-top: .2rem; }
+
+  /* ── DELIVERY ── */
+  #delivery { background: var(--dark); }
+  .delivery-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4vw;
+    align-items: center; margin-top: 3rem;
+  }
+  .delivery-card {
+    background: var(--card); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px; padding: 2rem;
+  }
+  .delivery-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  .delivery-card h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.4rem; font-weight: 400; color: var(--text); margin-bottom: .5rem;
+  }
+  .delivery-card p { color: var(--muted); font-size: .9rem; line-height: 1.6; }
+  .delivery-highlight {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem; color: var(--yellow); line-height: 1; margin: 1rem 0 .5rem;
+  }
+  .delivery-cards-col { display: flex; flex-direction: column; gap: 1rem; }
+  .map-placeholder {
+    background: var(--card); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    aspect-ratio: 4/3;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    min-height: clamp(300px, 36vw, 440px);
+  }
+  .map-frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+    filter: grayscale(.12) contrast(1.05);
+  }
+  .map-overlay {
+    position: absolute;
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    background: linear-gradient(135deg, rgba(13,13,13,0.94), rgba(30,30,30,0.88));
+    backdrop-filter: blur(10px);
+    flex-wrap: wrap;
+  }
+  .map-copy {
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+    min-width: 0;
+  }
+  .map-label {
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+  .map-addr {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(1rem, 2.1vw, 1.3rem);
+    font-weight: 400; color: var(--text);
+    line-height: 1.05;
+  }
+  .map-link {
+    background: var(--red); color: #fff; padding: 10px 24px;
+    border-radius: 4px; text-decoration: none;
+    font-weight: 700; font-size: .85rem; letter-spacing: 1px; text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: background .2s;
+  }
+  .map-link:hover { background: #b81515; }
+
+  /* ── HOURS ── */
+  #hours { background: var(--black); }
+  .hours-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem; margin-top: 3rem;
+  }
+  .hour-card {
+    background: var(--card); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px; padding: 1.5rem;
+    display: flex; flex-direction: column; gap: .4rem;
+  }
+  .hour-day {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.1rem; font-weight: 400; color: var(--muted); letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .hour-time {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.9rem; color: var(--yellow); line-height: 1;
+  }
+  .hour-badge {
+    display: inline-block; background: rgba(76,175,80,0.15);
+    border: 1px solid rgba(76,175,80,0.3); color: var(--green);
+    font-size: .65rem; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; padding: 3px 8px; border-radius: 12px;
+    margin-top: .3rem; width: fit-content;
+  }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--dark); }
+  .contact-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4vw;
+    margin-top: 3rem;
+  }
+  .contact-item {
+    display: flex; align-items: flex-start; gap: 1rem;
+    padding: 1.4rem; background: var(--card);
+    border: 1px solid rgba(255,255,255,0.06); border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+  .contact-icon {
+    width: 46px; height: 46px; border-radius: 8px;
+    background: rgba(217,28,28,0.15); border: 1px solid rgba(217,28,28,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; flex-shrink: 0;
+  }
+  .contact-item h4 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 400; font-size: 1rem; color: var(--muted);
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: .3rem;
+  }
+  .contact-item p { color: var(--text); font-size: 1rem; font-weight: 600; }
+  .contact-item a { color: var(--yellow); text-decoration: none; }
+  .contact-item a:hover { text-decoration: underline; }
+  .legal-box {
+    background: var(--card); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px; padding: 2rem;
+  }
+  .legal-box h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.1rem; font-weight: 400; color: var(--muted);
+    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1.2rem;
+  }
+  .legal-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: .6rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: .9rem;
+  }
+  .legal-row:last-child { border-bottom: none; }
+  .legal-row span:first-child { color: var(--muted); }
+  .legal-row span:last-child { color: var(--text); font-weight: 600; font-size: .85rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--black);
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding: 3rem 5vw;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem; color: var(--text); letter-spacing: 2px;
+  }
+  .footer-logo span { color: var(--red); }
+  footer p { color: var(--muted); font-size: .8rem; }
+
+  /* ── PROMO BANNER ── */
+  .promo-bar {
+    background: var(--red); padding: 12px 5vw;
+    display: flex; align-items: center; justify-content: center; gap: 1rem;
+    margin-top: 68px;
+  }
+  .promo-bar p {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 400; font-size: 1rem; letter-spacing: 2px;
+    text-transform: uppercase; color: #fff;
+    text-align: center;
+  }
+  .promo-bar p strong { color: var(--yellow); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 0 4vw; gap: .75rem; }
+    .nav-links { display: none; }
+    .nav-actions { gap: .5rem; }
+    .nav-cta { display: none; }
+    .lang-pill { min-width: 36px; padding: 6px 8px; }
+    .about-grid, .delivery-grid, .contact-grid { grid-template-columns: 1fr; }
+    .map-placeholder {
+      aspect-ratio: 1 / 1;
+      min-height: 300px;
+    }
+    .map-overlay {
+      left: .75rem;
+      right: .75rem;
+      bottom: .75rem;
+      flex-direction: column;
+      align-items: stretch;
+      padding: .9rem;
+    }
+    .map-link { width: 100%; text-align: center; }
+    .map-addr { font-size: 1.05rem; }
+    .hero-stats { gap: 1.5rem; }
+    footer { flex-direction: column; text-align: center; }
+  }
+
+  @media (max-width: 480px) {
+    .map-placeholder {
+      aspect-ratio: auto;
+      min-height: 260px;
+    }
+    .map-overlay {
+      left: .6rem;
+      right: .6rem;
+      bottom: .6rem;
+      gap: .75rem;
+    }
+    .map-label { font-size: .68rem; letter-spacing: 1.6px; }
+    .map-addr { font-size: .98rem; }
+    .map-link { padding: 10px 14px; font-size: .78rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Kebab<span>&nbsp;Friends</span></div>
+  <ul class="nav-links">
+    <li><a href="#about">O nas</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#delivery">Dostawa</a></li>
+    <li><a href="#hours">Godziny</a></li>
+    <li><a href="#contact">Kontakt</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button id="langToggle" class="lang-toggle" type="button" aria-label="Przełącz język" title="Przełącz język" data-lang="pl">
+      <span class="lang-pill lang-pill-pl">PL</span>
+      <span class="lang-pill lang-pill-en">EN</span>
+    </button>
+    <a href="tel:+48453485677" class="nav-cta">📞 Zamów teraz</a>
+  </div>
+</nav>
+
+<!-- PROMO BAR -->
+<div class="promo-bar">
+  <p class="promo-text">🎉 <strong>Wielkie Otwarcie – Kwiecień 2026!</strong>&nbsp; Dostawa do 10 km &nbsp;|&nbsp; Zadzwoń: <strong>+48 453 485 677</strong></p>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Wielkie Otwarcie · Lelis</div>
+    <h1 class="hero-title">
+      <span class="accent">Kebab</span><br>
+      <span class="line2">Friends</span>
+    </h1>
+    <p class="hero-sub">Prawdziwy kebab z rożna, świeże składniki i smaki, które wracają w snach.<br>Złap swój ulubiony wrap — rollo, bułka, talerz lub box.</p>
+    <div class="hero-actions">
+      <a href="tel:+48453485677" class="btn-primary">🔥 Zamów telefonicznie</a>
+      <a href="#menu" class="btn-outline">Zobacz menu</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">29+</div>
+        <div class="stat-label">Pozycji w menu</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">10km</div>
+        <div class="stat-label">Zasięg dostawy</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">5</div>
+        <div class="stat-label">Rodzajów sosów</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <span class="section-label">O nas</span>
+  <h2 class="section-title">Kto stoi za <span>kebabem?</span></h2>
+  <p class="section-desc">Jesteśmy pasjonatami dobrego jedzenia. Kebab Friends to miejsce, gdzie tradycja spotyka się z najwyższą jakością składników.</p>
+  <div class="about-grid">
+    <div class="about-visual">
+      <div class="about-visual-inner">🌯</div>
+      <div class="about-stripe"></div>
+    </div>
+    <div>
+      <ul class="about-points">
+        <li><strong>Świeże mięso z rożna</strong> – każdy kebab kroimy na miejscu, bez mrożonek.</li>
+        <li><strong>Domowe sosy</strong> – łagodny, czosnkowy, ostry, mieszany, serowy. Każdy do wyboru.</li>
+        <li><strong>Bogata oferta</strong> – rollo, bułka, talerz, box, kapsalon, hamburgery, nuggetsy, sałatki.</li>
+        <li><strong>Dostawa na telefon</strong> – dzwoń na <a href="tel:+48453485677" style="color:var(--yellow)">+48 453 485 677</a>, dowozimy do 10 km.</li>
+        <li><strong>Lokalizacja</strong> – Szkolna 69, 07-402 Lelis. Wejdź lub zamów z dostawy.</li>
+        <li><strong>Długie godziny</strong> – otwarte do 23:30, nawet w weekendy.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section id="menu">
+  <span class="section-label">Menu</span>
+  <h2 class="section-title">Co <span>zamawiasz?</span></h2>
+  <p class="section-desc">Od klasycznego rollo po sycący kapsalon — znajdź coś dla siebie.</p>
+
+  <div class="menu-cats">
+    <button class="cat-btn active" type="button" data-filter="all">Wszystko</button>
+    <button class="cat-btn" type="button" data-filter="rollo">Rollo Kebab</button>
+    <button class="cat-btn" type="button" data-filter="bun">Kebab Bułka</button>
+    <button class="cat-btn" type="button" data-filter="box">Kebab Box</button>
+    <button class="cat-btn" type="button" data-filter="plate">Na Talerzu</button>
+    <button class="cat-btn" type="button" data-filter="kapsalon">Kapsalon</button>
+    <button class="cat-btn" type="button" data-filter="fast-food">Fast Food</button>
+    <button class="cat-btn" type="button" data-filter="salads">Sałatki</button>
+  </div>
+
+  <div class="menu-grid">
+    <!-- ROLLO -->
+    <div class="menu-card" data-category="rollo">
+      <div class="menu-cat-tag">Rollo Kebab</div>
+      <div class="menu-item-name">Kebab Rollo</div>
+      <div class="menu-item-desc">Mięso, surówka, sos</div>
+      <div class="menu-item-price">od 16 zł <span>/ mały</span></div>
+      <div class="price-range">Mały 16 · Średni 20 · Mega 27</div>
+    </div>
+    <div class="menu-card" data-category="rollo">
+      <div class="menu-cat-tag">Rollo Kebab</div>
+      <div class="menu-item-name">Kebab Rollo z Frytkami</div>
+      <div class="menu-item-desc">Mięso, frytki, sos</div>
+      <div class="menu-item-price">od 18 zł</div>
+      <div class="price-range">Mały 18 · Średni 22 · Mega 29</div>
+    </div>
+    <div class="menu-card" data-category="rollo">
+      <div class="menu-cat-tag">Rollo Kebab</div>
+      <div class="menu-item-name">Kebab Rollo Super Mega</div>
+      <div class="menu-item-desc">Mięso, mieso, frytki, sos, ser</div>
+      <div class="menu-item-price">38 zł</div>
+    </div>
+    <div class="menu-card" data-category="rollo">
+      <div class="menu-cat-tag">Rollo Kebab</div>
+      <div class="menu-item-name">Falafel Rollo</div>
+      <div class="menu-item-desc">Falafel, surówka, sos</div>
+      <div class="menu-item-price">od 15 zł</div>
+      <div class="price-range">Mały 15 · Średni 19 · Mega 25</div>
+    </div>
+    <!-- BUŁKA -->
+    <div class="menu-card" data-category="bun">
+      <div class="menu-cat-tag">Kebab Bułka</div>
+      <div class="menu-item-name">Kebab w Bułce</div>
+      <div class="menu-item-desc">Mięso, surówka, sos</div>
+      <div class="menu-item-price">od 25 zł</div>
+      <div class="price-range">Średni 25 · Mega 30</div>
+    </div>
+    <div class="menu-card" data-category="bun">
+      <div class="menu-cat-tag">Kebab Bułka</div>
+      <div class="menu-item-name">Kebab Super Mega</div>
+      <div class="menu-item-desc">Mięso, surówka, frytki, sos, ser</div>
+      <div class="menu-item-price">38 zł</div>
+    </div>
+    <!-- BOX -->
+    <div class="menu-card" data-category="box">
+      <div class="menu-cat-tag">Kebab Box</div>
+      <div class="menu-item-name">Kebab Box</div>
+      <div class="menu-item-desc">Mięso, surówka, frytki, sos</div>
+      <div class="menu-item-price">od 20 zł</div>
+      <div class="price-range">Średni 20 · Mega 27</div>
+    </div>
+    <div class="menu-card" data-category="box">
+      <div class="menu-cat-tag">Kebab Box</div>
+      <div class="menu-item-name">Kebab Chees Box</div>
+      <div class="menu-item-desc">Mięso, surówka, frytki, sos, ser</div>
+      <div class="menu-item-price">od 24 zł</div>
+      <div class="price-range">Średni 24 · Mega 30</div>
+    </div>
+    <!-- NA TALERZU -->
+    <div class="menu-card" data-category="plate">
+      <div class="menu-cat-tag">Na Talerzu</div>
+      <div class="menu-item-name">Na Talerzu</div>
+      <div class="menu-item-desc">Mięso, surówka, frytki, sos</div>
+      <div class="menu-item-price">od 27 zł</div>
+      <div class="price-range">Mały 27 · Średni 33 · Mega 38</div>
+    </div>
+    <div class="menu-card" data-category="plate">
+      <div class="menu-cat-tag">Na Talerzu</div>
+      <div class="menu-item-name">Na Talerzu Super Friends</div>
+      <div class="menu-item-desc">Surówka, mięso, frytki, sos, ser</div>
+      <div class="menu-item-price">43 zł</div>
+    </div>
+    <!-- KAPSALON -->
+    <div class="menu-card" data-category="kapsalon">
+      <div class="menu-cat-tag">Kapsalon</div>
+      <div class="menu-item-name">Kapsalon</div>
+      <div class="menu-item-desc">Mięso, surówka, frytki, sos, ser</div>
+      <div class="menu-item-price">30 zł</div>
+    </div>
+    <div class="menu-card" data-category="kapsalon">
+      <div class="menu-cat-tag">Kapsalon</div>
+      <div class="menu-item-name">Kapsalon Super Mega</div>
+      <div class="menu-item-desc">Mięso, surówka, frytki, sos, ser</div>
+      <div class="menu-item-price">38 zł</div>
+    </div>
+    <!-- HAMBURGERY -->
+    <div class="menu-card" data-category="fast-food">
+      <div class="menu-cat-tag">Hamburgery</div>
+      <div class="menu-item-name">Hamburger z Kurczakiem</div>
+      <div class="menu-item-desc">Kurczak, sałata, pomidor, ogórek, sos</div>
+      <div class="menu-item-price">24 zł</div>
+    </div>
+    <div class="menu-card" data-category="fast-food">
+      <div class="menu-cat-tag">Hamburgery</div>
+      <div class="menu-item-name">Super Hamburger z Kurczakiem</div>
+      <div class="menu-item-desc">2× kurczak, sałata, pomidor, ogórek, sos, ser, frytki, pepsi</div>
+      <div class="menu-item-price">35 zł</div>
+    </div>
+    <!-- FAST FOOD -->
+    <div class="menu-card" data-category="fast-food">
+      <div class="menu-cat-tag">Fast Food</div>
+      <div class="menu-item-name">Nuggetsy</div>
+      <div class="menu-item-desc">Nuggetsy, frytki</div>
+      <div class="menu-item-price">od 18 zł</div>
+      <div class="price-range">Śred. (6 szt.) 18 · Mega (12 szt.) 26</div>
+    </div>
+    <div class="menu-card" data-category="fast-food">
+      <div class="menu-cat-tag">Fast Food</div>
+      <div class="menu-item-name">Skrzydełka</div>
+      <div class="menu-item-desc">Skrzydełka, frytki</div>
+      <div class="menu-item-price">od 20 zł</div>
+      <div class="price-range">Śred. (4 szt.) 20 · Mega (8 szt.) 27</div>
+    </div>
+    <div class="menu-card" data-category="fast-food">
+      <div class="menu-cat-tag">Fast Food</div>
+      <div class="menu-item-name">Frytki</div>
+      <div class="menu-item-desc">Klasyczne frytki</div>
+      <div class="menu-item-price">od 8 zł</div>
+      <div class="price-range">Małe 8 · Mega 15</div>
+    </div>
+    <!-- SAŁATKI -->
+    <div class="menu-card" data-category="salads">
+      <div class="menu-cat-tag">Sałatki</div>
+      <div class="menu-item-name">Sałatka Grecka</div>
+      <div class="menu-item-desc">Sałata, pomidor, ser feta, oliwki</div>
+      <div class="menu-item-price">20 zł</div>
+    </div>
+    <div class="menu-card" data-category="salads">
+      <div class="menu-cat-tag">Sałatki</div>
+      <div class="menu-item-name">Sałatka Mięsna</div>
+      <div class="menu-item-desc">Mięso, sałata, pomidor, ser feta, oliwki, sos</div>
+      <div class="menu-item-price">30 zł</div>
+    </div>
+  </div>
+
+  <p class="menu-note" style="margin-top:2rem; color:var(--muted); font-size:.85rem;">
+    ℹ️ Dodatkowe mięso +5 zł &nbsp;|&nbsp; Opakowanie na wynos +1 zł &nbsp;|&nbsp;
+    Sosy: łagodny, czosnkowy, ostry, mieszany, serowy
+  </p>
+</section>
+
+<!-- DELIVERY -->
+<section id="delivery">
+  <span class="section-label">Dostawa</span>
+  <h2 class="section-title">Dowozimy do <span>10 km</span></h2>
+  <p class="section-desc">Zadzwoń, złóż zamówienie i czekaj — przyjedziemy do Ciebie.</p>
+  <div class="delivery-grid">
+    <div class="map-placeholder">
+      <iframe
+        class="map-frame"
+        src="https://maps.google.com/maps?q=Szkolna%2069,%2007-402%20Lelis,%20Poland&z=15&output=embed"
+        title="Mapa lokalizacji Kebab Friends"
+        loading="lazy"
+        allowfullscreen
+        referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <div class="map-overlay">
+        <div class="map-copy">
+          <div class="map-label">Kebab Friends</div>
+          <div class="map-addr">Szkolna 69, 07-402 Lelis</div>
+        </div>
+        <a href="https://maps.google.com/?q=Szkolna+69+Lelis" target="_blank" rel="noopener noreferrer" class="map-link">Otwórz w Mapach</a>
+      </div>
+    </div>
+    <div class="delivery-cards-col">
+      <div class="delivery-card">
+        <div class="delivery-icon">📞</div>
+        <h3>Zamów telefonicznie</h3>
+        <p>Zadzwoń, podaj adres i wybierz z menu — dowozimy w zasięgu 10 km.</p>
+        <div class="delivery-highlight"><a href="tel:+48453485677" style="color:var(--yellow);text-decoration:none">+48 453 485 677</a></div>
+      </div>
+      <div class="delivery-card">
+        <div class="delivery-icon">🛵</div>
+        <h3>Zasięg dostawy</h3>
+        <p>Dostarczamy jedzenie w promieniu <strong style="color:var(--yellow)">10 km</strong> od lokalu przy ul. Szkolnej 69 w Lelis.</p>
+      </div>
+      <div class="delivery-card">
+        <div class="delivery-icon">🏠</div>
+        <h3>Odbiór osobisty</h3>
+        <p>Przyjdź do nas lub zamów z wyprzedzeniem i odbierz bez czekania.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOURS -->
+<section id="hours">
+  <span class="section-label">Godziny Otwarcia</span>
+  <h2 class="section-title">Kiedy <span>jesteśmy?</span></h2>
+  <p class="section-desc">Otwieramy wcześnie, zamykamy późno — zawsze gotowi na Twój głód.</p>
+  <div class="hours-grid">
+    <div class="hour-card">
+      <div class="hour-day">Poniedziałek</div>
+      <div class="hour-time">10:00–23:30</div>
+      <span class="hour-badge">Otwarte</span>
+    </div>
+    <div class="hour-card">
+      <div class="hour-day">Wtorek</div>
+      <div class="hour-time">10:00–23:30</div>
+      <span class="hour-badge">Otwarte</span>
+    </div>
+    <div class="hour-card">
+      <div class="hour-day">Środa</div>
+      <div class="hour-time">10:00–23:30</div>
+      <span class="hour-badge">Otwarte</span>
+    </div>
+    <div class="hour-card">
+      <div class="hour-day">Czwartek</div>
+      <div class="hour-time">10:00–23:30</div>
+      <span class="hour-badge">Otwarte</span>
+    </div>
+    <div class="hour-card">
+      <div class="hour-day">Piątek</div>
+      <div class="hour-time">10:00–23:00</div>
+      <span class="hour-badge">Otwarte</span>
+    </div>
+    <div class="hour-card">
+      <div class="hour-day">Sobota</div>
+      <div class="hour-time">10:00–23:00</div>
+      <span class="hour-badge">Otwarte</span>
+    </div>
+    <div class="hour-card">
+      <div class="hour-day">Niedziela</div>
+      <div class="hour-time">11:00–23:30</div>
+      <span class="hour-badge">Otwarte</span>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <span class="section-label">Kontakt</span>
+  <h2 class="section-title">Skontaktuj <span>się</span></h2>
+  <p class="section-desc">Zamów, zapytaj, lub po prostu wpadnij. Czekamy na Ciebie!</p>
+  <div class="contact-grid">
+    <div>
+      <div class="contact-item">
+        <div class="contact-icon">📞</div>
+        <div>
+          <h4>Telefon / Zamówienia</h4>
+          <p><a href="tel:+48453485677">+48 453 485 677</a></p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">📍</div>
+        <div>
+          <h4>Adres</h4>
+          <p>Szkolna 69, 07-402 Lelis</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">🕐</div>
+        <div>
+          <h4>Dziś otwarte</h4>
+          <p>Pon–Czw: 10:00–23:30 &nbsp;|&nbsp; Pt–Sob: 10:00–23:00 &nbsp;|&nbsp; Nd: 11:00–23:30</p>
+        </div>
+      </div>
+    </div>
+    <div class="legal-box">
+      <h3>Dane Firmy</h3>
+      <div class="legal-row">
+        <span>Nazwa</span>
+        <span>EMPIRE CORPORATION SP. Z O.O.</span>
+      </div>
+      <div class="legal-row">
+        <span>Marka</span>
+        <span>Kebab Friends</span>
+      </div>
+      <div class="legal-row">
+        <span>KRS</span>
+        <span>0001171651</span>
+      </div>
+      <div class="legal-row">
+        <span>NIP</span>
+        <span>5273165211</span>
+      </div>
+      <div class="legal-row">
+        <span>REGON</span>
+        <span>541769931</span>
+      </div>
+      <div class="legal-row">
+        <span>Forma prawna</span>
+        <span>Spółka z o.o.</span>
+      </div>
+      <div class="legal-row">
+        <span>Siedziba</span>
+        <span>Złota 2/19, 15-016 Białystok</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Kebab<span>&nbsp;Friends</span></div>
+  <p class="footer-copy">© 2026 Empire Corporation sp. z o.o. · Wszelkie prawa zastrzeżone</p>
+  <p class="footer-contact">Szkolna 69, 07-402 Lelis &nbsp;·&nbsp; <a href="tel:+48453485677" style="color:var(--yellow)">+48 453 485 677</a></p>
+</footer>
+
+<script>
+  const langToggle = document.getElementById('langToggle');
+  const menuButtons = document.querySelectorAll('.cat-btn');
+  const menuCards = document.querySelectorAll('.menu-card');
+  const menuPriceRanges = document.querySelectorAll('.menu-card .price-range');
+  const mapFrame = document.querySelector('.map-frame');
+  let activeCategory = 'all';
+
+  const setText = (selector, value) => {
+    const element = document.querySelector(selector);
+    if (element) element.textContent = value;
+  };
+
+  const setHTML = (selector, value) => {
+    const element = document.querySelector(selector);
+    if (element) element.innerHTML = value;
+  };
+
+  const setList = (nodeList, values, property = 'textContent') => {
+    nodeList.forEach((node, index) => {
+      if (values[index] !== undefined) node[property] = values[index];
+    });
+  };
+
+  const filterMenu = (category) => {
+    activeCategory = category;
+
+    menuButtons.forEach(button => {
+      const isActive = button.dataset.filter === category;
+      button.classList.toggle('active', isActive);
+      button.setAttribute('aria-pressed', String(isActive));
+    });
+
+    menuCards.forEach(card => {
+      const matches = category === 'all' || card.dataset.category === category;
+      card.classList.toggle('is-hidden', !matches);
+    });
+  };
+
+  const translations = {
+    pl: {
+      meta: {
+        title: 'Kebab Friends – Szkolna 69, Lelis',
+        toggleLabel: 'Przełącz język na angielski'
+      },
+      nav: {
+        links: ['O nas', 'Menu', 'Dostawa', 'Godziny', 'Kontakt'],
+        cta: '📞 Zamów teraz'
+      },
+      promo: '🎉 <strong>Wielkie Otwarcie – Kwiecień 2026!</strong>&nbsp; Dostawa do 10 km &nbsp;|&nbsp; Zadzwoń: <strong>+48 453 485 677</strong>',
+      hero: {
+        badge: 'Wielkie Otwarcie · Lelis',
+        sub: 'Prawdziwy kebab z rożna, świeże składniki i smaki, które wracają w snach.<br>Złap swój ulubiony wrap — rollo, bułka, talerz lub box.',
+        primary: '🔥 Zamów telefonicznie',
+        secondary: 'Zobacz menu',
+        stats: ['Pozycji w menu', 'Zasięg dostawy', 'Rodzajów sosów']
+      },
+      about: {
+        label: 'O nas',
+        title: 'Kto stoi za <span>kebabem?</span>',
+        desc: 'Jesteśmy pasjonatami dobrego jedzenia. Kebab Friends to miejsce, gdzie tradycja spotyka się z najwyższą jakością składników.',
+        points: [
+          '<strong>Świeże mięso z rożna</strong> – każdy kebab kroimy na miejscu, bez mrożonek.',
+          '<strong>Domowe sosy</strong> – łagodny, czosnkowy, ostry, mieszany, serowy. Każdy do wyboru.',
+          '<strong>Bogata oferta</strong> – rollo, bułka, talerz, box, kapsalon, hamburgery, nuggetsy, sałatki.',
+          '<strong>Dostawa na telefon</strong> – dzwoń na <a href="tel:+48453485677" style="color:var(--yellow)">+48 453 485 677</a>, dowozimy do 10 km.',
+          '<strong>Lokalizacja</strong> – Szkolna 69, 07-402 Lelis. Wejdź lub zamów z dostawy.',
+          '<strong>Długie godziny</strong> – otwarte do 23:30, nawet w weekendy.'
+        ]
+      },
+      menu: {
+        label: 'Menu',
+        title: 'Co <span>zamawiasz?</span>',
+        desc: 'Od klasycznego rollo po sycący kapsalon — znajdź coś dla siebie.',
+        categories: ['Wszystko', 'Rollo Kebab', 'Kebab Bułka', 'Kebab Box', 'Na Talerzu', 'Kapsalon', 'Fast Food', 'Sałatki'],
+        tags: [
+          'Rollo Kebab', 'Rollo Kebab', 'Rollo Kebab', 'Rollo Kebab', 'Kebab Bułka',
+          'Kebab Bułka', 'Kebab Box', 'Kebab Box', 'Na Talerzu', 'Na Talerzu',
+          'Kapsalon', 'Kapsalon', 'Hamburgery', 'Hamburgery', 'Fast Food',
+          'Fast Food', 'Fast Food', 'Sałatki', 'Sałatki'
+        ],
+        names: [
+          'Kebab Rollo', 'Kebab Rollo z Frytkami', 'Kebab Rollo Super Mega', 'Falafel Rollo',
+          'Kebab w Bułce', 'Kebab Super Mega', 'Kebab Box', 'Kebab Cheese Box',
+          'Na Talerzu', 'Na Talerzu Super Friends', 'Kapsalon', 'Kapsalon Super Mega',
+          'Hamburger z Kurczakiem', 'Super Hamburger z Kurczakiem', 'Nuggetsy',
+          'Skrzydełka', 'Frytki', 'Sałatka Grecka', 'Sałatka Mięsna'
+        ],
+        descriptions: [
+          'Mięso, surówka, sos',
+          'Mięso, frytki, sos',
+          'Mięso, frytki, sos, ser',
+          'Falafel, surówka, sos',
+          'Mięso, surówka, sos',
+          'Mięso, surówka, frytki, sos, ser',
+          'Mięso, surówka, frytki, sos',
+          'Mięso, surówka, frytki, sos, ser',
+          'Mięso, surówka, frytki, sos',
+          'Surówka, mięso, frytki, sos, ser',
+          'Mięso, surówka, frytki, sos, ser',
+          'Mięso, surówka, frytki, sos, ser',
+          'Kurczak, sałata, pomidor, ogórek, sos',
+          '2× kurczak, sałata, pomidor, ogórek, sos, ser, frytki, pepsi',
+          'Nuggetsy, frytki',
+          'Skrzydełka, frytki',
+          'Klasyczne frytki',
+          'Sałata, pomidor, ser feta, oliwki',
+          'Mięso, sałata, pomidor, ser feta, oliwki, sos'
+        ],
+        prices: [
+          'od 16 zł <span>/ mały</span>',
+          'od 18 zł',
+          '38 zł',
+          'od 15 zł',
+          'od 25 zł',
+          '38 zł',
+          'od 20 zł',
+          'od 24 zł',
+          'od 27 zł',
+          '43 zł',
+          '30 zł',
+          '38 zł',
+          '24 zł',
+          '35 zł',
+          'od 18 zł',
+          'od 20 zł',
+          'od 8 zł',
+          '20 zł',
+          '30 zł'
+        ],
+        ranges: [
+          'Mały 16 · Średni 20 · Mega 27',
+          'Mały 18 · Średni 22 · Mega 29',
+          'Mały 15 · Średni 19 · Mega 25',
+          'Średni 25 · Mega 30',
+          'Średni 20 · Mega 27',
+          'Średni 24 · Mega 30',
+          'Mały 27 · Średni 33 · Mega 38',
+          'Śred. (6 szt.) 18 · Mega (12 szt.) 26',
+          'Śred. (4 szt.) 20 · Mega (8 szt.) 27',
+          'Małe 8 · Mega 15'
+        ],
+        note: 'ℹ️ Dodatkowe mięso +5 zł &nbsp;|&nbsp; Opakowanie na wynos +1 zł &nbsp;|&nbsp; Sosy: łagodny, czosnkowy, ostry, mieszany, serowy'
+      },
+      delivery: {
+        label: 'Dostawa',
+        title: 'Dowozimy do <span>10 km</span>',
+        desc: 'Zadzwoń, złóż zamówienie i czekaj — przyjedziemy do Ciebie.',
+        mapLabel: 'Kebab Friends',
+        mapLink: 'Otwórz w Mapach',
+        mapTitle: 'Mapa lokalizacji Kebab Friends',
+        cards: [
+          {
+            title: 'Zamów telefonicznie',
+            desc: 'Zadzwoń, podaj adres i wybierz z menu — dowozimy w zasięgu 10 km.'
+          },
+          {
+            title: 'Zasięg dostawy',
+            desc: 'Dostarczamy jedzenie w promieniu <strong style="color:var(--yellow)">10 km</strong> od lokalu przy ul. Szkolnej 69 w Lelis.'
+          },
+          {
+            title: 'Odbiór osobisty',
+            desc: 'Przyjdź do nas lub zamów z wyprzedzeniem i odbierz bez czekania.'
+          }
+        ]
+      },
+      hours: {
+        label: 'Godziny Otwarcia',
+        title: 'Kiedy <span>jesteśmy?</span>',
+        desc: 'Otwieramy wcześnie, zamykamy późno — zawsze gotowi na Twój głód.',
+        days: ['Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota', 'Niedziela'],
+        badge: 'Otwarte'
+      },
+      contact: {
+        label: 'Kontakt',
+        title: 'Skontaktuj <span>się</span>',
+        desc: 'Zamów, zapytaj, lub po prostu wpadnij. Czekamy na Ciebie!',
+        labels: ['Telefon / Zamówienia', 'Adres', 'Dziś otwarte'],
+        values: [
+          '<a href="tel:+48453485677">+48 453 485 677</a>',
+          'Szkolna 69, 07-402 Lelis',
+          'Pon–Czw: 10:00–23:30 &nbsp;|&nbsp; Pt–Sob: 10:00–23:00 &nbsp;|&nbsp; Nd: 11:00–23:30'
+        ]
+      },
+      legal: {
+        title: 'Dane Firmy',
+        labels: ['Nazwa', 'Marka', 'KRS', 'NIP', 'REGON', 'Forma prawna', 'Siedziba'],
+        values: [
+          'EMPIRE CORPORATION SP. Z O.O.',
+          'Kebab Friends',
+          '0001171651',
+          '5273165211',
+          '541769931',
+          'Spółka z o.o.',
+          'Złota 2/19, 15-016 Białystok'
+        ]
+      },
+      footer: {
+        copy: '© 2026 Empire Corporation sp. z o.o. · Wszelkie prawa zastrzeżone',
+        contact: 'Szkolna 69, 07-402 Lelis &nbsp;·&nbsp; <a href="tel:+48453485677" style="color:var(--yellow)">+48 453 485 677</a>'
+      }
+    },
+    en: {
+      meta: {
+        title: 'Kebab Friends – Szkolna 69, Lelis',
+        toggleLabel: 'Switch language to Polish'
+      },
+      nav: {
+        links: ['About', 'Menu', 'Delivery', 'Hours', 'Contact'],
+        cta: '📞 Order now'
+      },
+      promo: '🎉 <strong>Grand Opening – April 2026!</strong>&nbsp; Delivery up to 10 km &nbsp;|&nbsp; Call: <strong>+48 453 485 677</strong>',
+      hero: {
+        badge: 'Grand Opening · Lelis',
+        sub: 'Real spit-roasted kebab, fresh ingredients and flavors you will keep thinking about.<br>Grab your favorite wrap — rollo, bun, plate or box.',
+        primary: '🔥 Order by phone',
+        secondary: 'View menu',
+        stats: ['Menu items', 'Delivery range', 'Sauce types']
+      },
+      about: {
+        label: 'About',
+        title: 'Who is behind the <span>kebab?</span>',
+        desc: 'We are passionate about great food. Kebab Friends is where tradition meets top-quality ingredients.',
+        points: [
+          '<strong>Fresh spit-roasted meat</strong> – every kebab is sliced to order, with no frozen shortcuts.',
+          '<strong>House sauces</strong> – mild, garlic, spicy, mixed, cheese. Pick your favorite.',
+          '<strong>Big selection</strong> – rollo, bun, plate, box, kapsalon, burgers, nuggets and salads.',
+          '<strong>Phone delivery</strong> – call <a href="tel:+48453485677" style="color:var(--yellow)">+48 453 485 677</a>, we deliver up to 10 km.',
+          '<strong>Location</strong> – Szkolna 69, 07-402 Lelis. Drop in or order for delivery.',
+          '<strong>Long hours</strong> – open until 23:30, even on weekends.'
+        ]
+      },
+      menu: {
+        label: 'Menu',
+        title: 'What are you <span>ordering?</span>',
+        desc: 'From a classic rollo to a loaded kapsalon — there is something here for every appetite.',
+        categories: ['All', 'Rollo Kebab', 'Kebab Bun', 'Kebab Box', 'Plate', 'Kapsalon', 'Fast Food', 'Salads'],
+        tags: [
+          'Rollo Kebab', 'Rollo Kebab', 'Rollo Kebab', 'Rollo Kebab', 'Kebab Bun',
+          'Kebab Bun', 'Kebab Box', 'Kebab Box', 'Plate', 'Plate',
+          'Kapsalon', 'Kapsalon', 'Burgers', 'Burgers', 'Fast Food',
+          'Fast Food', 'Fast Food', 'Salads', 'Salads'
+        ],
+        names: [
+          'Kebab Rollo', 'Kebab Rollo with Fries', 'Super Mega Kebab Rollo', 'Falafel Rollo',
+          'Kebab in a Bun', 'Super Mega Kebab', 'Kebab Box', 'Kebab Cheese Box',
+          'Kebab Plate', 'Super Friends Plate', 'Kapsalon', 'Super Mega Kapsalon',
+          'Chicken Burger', 'Super Chicken Burger', 'Nuggets',
+          'Wings', 'Fries', 'Greek Salad', 'Meat Salad'
+        ],
+        descriptions: [
+          'Meat, salad, sauce',
+          'Meat, fries, sauce',
+          'Meat, fries, sauce, cheese',
+          'Falafel, salad, sauce',
+          'Meat, salad, sauce',
+          'Meat, salad, fries, sauce, cheese',
+          'Meat, salad, fries, sauce',
+          'Meat, salad, fries, sauce, cheese',
+          'Meat, salad, fries, sauce',
+          'Salad, meat, fries, sauce, cheese',
+          'Meat, salad, fries, sauce, cheese',
+          'Meat, salad, fries, sauce, cheese',
+          'Chicken, lettuce, tomato, cucumber, sauce',
+          '2× chicken, lettuce, tomato, cucumber, sauce, cheese, fries, Pepsi',
+          'Nuggets, fries',
+          'Wings, fries',
+          'Classic fries',
+          'Lettuce, tomato, feta cheese, olives',
+          'Meat, lettuce, tomato, feta cheese, olives, sauce'
+        ],
+        prices: [
+          'from 16 PLN <span>/ small</span>',
+          'from 18 PLN',
+          '38 PLN',
+          'from 15 PLN',
+          'from 25 PLN',
+          '38 PLN',
+          'from 20 PLN',
+          'from 24 PLN',
+          'from 27 PLN',
+          '43 PLN',
+          '30 PLN',
+          '38 PLN',
+          '24 PLN',
+          '35 PLN',
+          'from 18 PLN',
+          'from 20 PLN',
+          'from 8 PLN',
+          '20 PLN',
+          '30 PLN'
+        ],
+        ranges: [
+          'Small 16 · Medium 20 · Mega 27',
+          'Small 18 · Medium 22 · Mega 29',
+          'Small 15 · Medium 19 · Mega 25',
+          'Medium 25 · Mega 30',
+          'Medium 20 · Mega 27',
+          'Medium 24 · Mega 30',
+          'Small 27 · Medium 33 · Mega 38',
+          'Medium (6 pcs) 18 · Mega (12 pcs) 26',
+          'Medium (4 pcs) 20 · Mega (8 pcs) 27',
+          'Small 8 · Mega 15'
+        ],
+        note: 'ℹ️ Extra meat +5 PLN &nbsp;|&nbsp; Takeaway packaging +1 PLN &nbsp;|&nbsp; Sauces: mild, garlic, spicy, mixed, cheese'
+      },
+      delivery: {
+        label: 'Delivery',
+        title: 'We deliver up to <span>10 km</span>',
+        desc: 'Call us, place your order and relax — we will bring it to you.',
+        mapLabel: 'Kebab Friends',
+        mapLink: 'Open in Maps',
+        mapTitle: 'Kebab Friends location map',
+        cards: [
+          {
+            title: 'Order by phone',
+            desc: 'Call us, share your address and choose from the menu — we deliver within a 10 km range.'
+          },
+          {
+            title: 'Delivery range',
+            desc: 'We deliver food within a <strong style="color:var(--yellow)">10 km</strong> radius of our location on Szkolna 69 in Lelis.'
+          },
+          {
+            title: 'Pickup',
+            desc: 'Stop by or order ahead and pick everything up without waiting.'
+          }
+        ]
+      },
+      hours: {
+        label: 'Opening Hours',
+        title: 'When are <span>we open?</span>',
+        desc: 'We open early, close late and stay ready for your cravings.',
+        days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+        badge: 'Open'
+      },
+      contact: {
+        label: 'Contact',
+        title: 'Get in <span>touch</span>',
+        desc: 'Order, ask a question or just drop by. We are ready for you!',
+        labels: ['Phone / Orders', 'Address', 'Open today'],
+        values: [
+          '<a href="tel:+48453485677">+48 453 485 677</a>',
+          'Szkolna 69, 07-402 Lelis',
+          'Mon–Thu: 10:00–23:30 &nbsp;|&nbsp; Fri–Sat: 10:00–23:00 &nbsp;|&nbsp; Sun: 11:00–23:30'
+        ]
+      },
+      legal: {
+        title: 'Company Details',
+        labels: ['Name', 'Brand', 'KRS', 'Tax ID', 'REGON', 'Legal form', 'Registered office'],
+        values: [
+          'EMPIRE CORPORATION SP. Z O.O.',
+          'Kebab Friends',
+          '0001171651',
+          '5273165211',
+          '541769931',
+          'Limited liability company (sp. z o.o.)',
+          'Złota 2/19, 15-016 Białystok'
+        ]
+      },
+      footer: {
+        copy: '© 2026 Empire Corporation sp. z o.o. · All rights reserved',
+        contact: 'Szkolna 69, 07-402 Lelis &nbsp;·&nbsp; <a href="tel:+48453485677" style="color:var(--yellow)">+48 453 485 677</a>'
+      }
+    }
+  };
+
+  const applyLanguage = (lang) => {
+    const copy = translations[lang] || translations.pl;
+    const isEnglish = lang === 'en';
+
+    document.documentElement.lang = lang;
+    document.title = copy.meta.title;
+    langToggle.dataset.lang = lang;
+    langToggle.setAttribute('aria-label', copy.meta.toggleLabel);
+    langToggle.setAttribute('title', copy.meta.toggleLabel);
+    langToggle.setAttribute('aria-pressed', String(isEnglish));
+
+    setList(document.querySelectorAll('.nav-links a'), copy.nav.links);
+    setText('.nav-cta', copy.nav.cta);
+    setHTML('.promo-text', copy.promo);
+
+    setText('.hero-badge', copy.hero.badge);
+    setHTML('.hero-sub', copy.hero.sub);
+    setText('.btn-primary', copy.hero.primary);
+    setText('.btn-outline', copy.hero.secondary);
+    setList(document.querySelectorAll('.stat-label'), copy.hero.stats);
+
+    setText('#about .section-label', copy.about.label);
+    setHTML('#about .section-title', copy.about.title);
+    setText('#about .section-desc', copy.about.desc);
+    setList(document.querySelectorAll('.about-points li'), copy.about.points, 'innerHTML');
+
+    setText('#menu .section-label', copy.menu.label);
+    setHTML('#menu .section-title', copy.menu.title);
+    setText('#menu .section-desc', copy.menu.desc);
+    setList(document.querySelectorAll('.menu-cats .cat-btn'), copy.menu.categories);
+    setList(document.querySelectorAll('.menu-card .menu-cat-tag'), copy.menu.tags);
+    setList(document.querySelectorAll('.menu-card .menu-item-name'), copy.menu.names);
+    setList(document.querySelectorAll('.menu-card .menu-item-desc'), copy.menu.descriptions);
+    setList(document.querySelectorAll('.menu-card .menu-item-price'), copy.menu.prices, 'innerHTML');
+    setList(menuPriceRanges, copy.menu.ranges);
+    setHTML('.menu-note', copy.menu.note);
+
+    setText('#delivery .section-label', copy.delivery.label);
+    setHTML('#delivery .section-title', copy.delivery.title);
+    setText('#delivery .section-desc', copy.delivery.desc);
+    setText('.map-label', copy.delivery.mapLabel);
+    setText('.map-link', copy.delivery.mapLink);
+    if (mapFrame) mapFrame.title = copy.delivery.mapTitle;
+    setList(document.querySelectorAll('.delivery-card h3'), copy.delivery.cards.map(card => card.title));
+    setList(document.querySelectorAll('.delivery-cards-col .delivery-card p'), copy.delivery.cards.map(card => card.desc), 'innerHTML');
+
+    setText('#hours .section-label', copy.hours.label);
+    setHTML('#hours .section-title', copy.hours.title);
+    setText('#hours .section-desc', copy.hours.desc);
+    setList(document.querySelectorAll('.hour-day'), copy.hours.days);
+    setList(document.querySelectorAll('.hour-badge'), Array(7).fill(copy.hours.badge));
+
+    setText('#contact .section-label', copy.contact.label);
+    setHTML('#contact .section-title', copy.contact.title);
+    setText('#contact .section-desc', copy.contact.desc);
+    setList(document.querySelectorAll('.contact-item h4'), copy.contact.labels);
+    setList(document.querySelectorAll('.contact-item p'), copy.contact.values, 'innerHTML');
+
+    setText('.legal-box h3', copy.legal.title);
+    setList(document.querySelectorAll('.legal-row span:first-child'), copy.legal.labels);
+    setList(document.querySelectorAll('.legal-row span:last-child'), copy.legal.values);
+
+    setText('.footer-copy', copy.footer.copy);
+    setHTML('.footer-contact', copy.footer.contact);
+  };
+
+  const savedLanguage = localStorage.getItem('kebab-friends-lang');
+  applyLanguage(savedLanguage === 'en' ? 'en' : 'pl');
+  filterMenu(activeCategory);
+
+  langToggle.addEventListener('click', () => {
+    const nextLanguage = langToggle.dataset.lang === 'pl' ? 'en' : 'pl';
+    localStorage.setItem('kebab-friends-lang', nextLanguage);
+    applyLanguage(nextLanguage);
+  });
+
+  menuButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      filterMenu(button.dataset.filter || 'all');
+    });
+  });
+</script>
+</body>
+</html>
